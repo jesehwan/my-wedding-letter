@@ -69,6 +69,20 @@ export class Vector3 {
     return new Vector3(this.x, this.y, this.z);
   }
 
+  subVectors(a: Vector3, b: Vector3) {
+    this.x = a.x - b.x;
+    this.y = a.y - b.y;
+    this.z = a.z - b.z;
+    return this;
+  }
+
+  lerpVectors(a: Vector3, b: Vector3, alpha: number) {
+    this.x = a.x + (b.x - a.x) * alpha;
+    this.y = a.y + (b.y - a.y) * alpha;
+    this.z = a.z + (b.z - a.z) * alpha;
+    return this;
+  }
+
   lerp(v: Vector3, alpha: number) {
     this.x += (v.x - this.x) * alpha;
     this.y += (v.y - this.y) * alpha;
@@ -86,6 +100,17 @@ export class Box3 {
     this.max = max;
   }
 
+  setFromObject(_obj: any) {
+    return this;
+  }
+
+  getCenter(target: Vector3) {
+    target.x = (this.min.x + this.max.x) / 2;
+    target.y = (this.min.y + this.max.y) / 2;
+    target.z = (this.min.z + this.max.z) / 2;
+    return target;
+  }
+
   containsPoint(point: Vector3) {
     return (
       point.x >= this.min.x &&
@@ -95,6 +120,41 @@ export class Box3 {
       point.z >= this.min.z &&
       point.z <= this.max.z
     );
+  }
+}
+
+export class Ray {
+  origin: Vector3;
+  direction: Vector3;
+
+  constructor(origin = new Vector3(), direction = new Vector3()) {
+    this.origin = origin;
+    this.direction = direction;
+  }
+
+  intersectsBox(box: Box3): boolean {
+    // Slab method for ray-AABB intersection
+    const invDirX = this.direction.x !== 0 ? 1 / this.direction.x : Infinity;
+    const invDirY = this.direction.y !== 0 ? 1 / this.direction.y : Infinity;
+    const invDirZ = this.direction.z !== 0 ? 1 / this.direction.z : Infinity;
+
+    let tmin = ((invDirX >= 0 ? box.min.x : box.max.x) - this.origin.x) * invDirX;
+    let tmax = ((invDirX >= 0 ? box.max.x : box.min.x) - this.origin.x) * invDirX;
+    const tymin = ((invDirY >= 0 ? box.min.y : box.max.y) - this.origin.y) * invDirY;
+    const tymax = ((invDirY >= 0 ? box.max.y : box.min.y) - this.origin.y) * invDirY;
+
+    if (tmin > tymax || tymin > tmax) return false;
+    if (tymin > tmin) tmin = tymin;
+    if (tymax < tmax) tmax = tymax;
+
+    const tzmin = ((invDirZ >= 0 ? box.min.z : box.max.z) - this.origin.z) * invDirZ;
+    const tzmax = ((invDirZ >= 0 ? box.max.z : box.min.z) - this.origin.z) * invDirZ;
+
+    if (tmin > tzmax || tzmin > tmax) return false;
+    if (tzmin > tmin) tmin = tzmin;
+    if (tzmax < tmax) tmax = tzmax;
+
+    return tmax >= 0;
   }
 }
 
@@ -191,5 +251,19 @@ export class AnimationMixer {
   update(_delta: number) {}
 }
 
+export class Points extends Object3D {
+  geometry = { attributes: { position: { needsUpdate: false }, color: { needsUpdate: false }, opacity: { needsUpdate: false } } };
+}
+export class BufferGeometry {
+  setAttribute() { return this; }
+  attributes: Record<string, any> = {};
+}
+export class BufferAttribute {
+  constructor(_array?: any, _itemSize?: number) {}
+  needsUpdate = false;
+}
+export class PointsMaterial {}
+
+export const AdditiveBlending = 2;
 export const DoubleSide = 2;
 export const FrontSide = 0;

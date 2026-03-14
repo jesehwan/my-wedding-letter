@@ -63,7 +63,7 @@ export const Character = forwardRef<Group, CharacterProps>(function Character(
 
   return (
     <group ref={ref} name="character">
-      <group ref={innerRef} scale={[0.01, 0.01, 0.01]}>
+      <group ref={innerRef} scale={[0.009, 0.009, 0.009]}>
         <primitive object={idleModel} />
       </group>
     </group>

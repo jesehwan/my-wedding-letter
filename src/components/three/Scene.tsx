@@ -13,8 +13,8 @@ interface SceneProps {
 
 export function Scene({
   children,
-  ambientIntensity = 0.15,
-  directionalIntensity = 0.3,
+  ambientIntensity = 3,
+  directionalIntensity = 1.5,
   directionalColor = "#b0c4de",
   showGroundPlane = true,
 }: SceneProps) {
@@ -22,6 +22,7 @@ export function Scene({
     <>
       {/* 밤하늘 배경 */}
       <color attach="background" args={["#0a0a2e"]} />
+      <fog attach="fog" args={["#0a0a2e", 15, 40]} />
       <Stars radius={100} depth={50} count={3000} factor={4} fade speed={1} />
 
       {/* 야간 조명 */}
@@ -38,8 +39,8 @@ export function Scene({
       {/* Ground plane */}
       {showGroundPlane && (
         <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-          <planeGeometry args={[50, 50]} />
-          <meshStandardMaterial color="#8fbc8f" />
+          <planeGeometry args={[200, 200]} />
+          <meshStandardMaterial color="#828588" />
         </mesh>
       )}
 

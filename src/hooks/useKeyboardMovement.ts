@@ -26,6 +26,8 @@ interface UseKeyboardMovementOptions {
   worldBounds?: AABB;
   characterRadius?: number;
   flipped?: boolean;
+  cameraAngleRef?: MutableRefObject<number>;
+  topDown?: boolean;
 }
 
 const CODE_MAP: Record<string, string> = {
@@ -86,9 +88,16 @@ export function useKeyboardMovement(options?: UseKeyboardMovementOptions) {
       dz = -joy.y;
     }
 
-    if (options?.flipped) {
-      dx = -dx;
-      dz = -dz;
+    // Rotate input by camera angle so movement is always camera-relative
+    // Skip in topDown mode — direct input feels natural from above
+    const angle = options?.topDown ? 0 : (options?.cameraAngleRef?.current ?? 0);
+    if (angle !== 0) {
+      const cos = Math.cos(angle);
+      const sin = Math.sin(angle);
+      const rx = dx * cos + dz * sin;
+      const rz = -dx * sin + dz * cos;
+      dx = rx;
+      dz = rz;
     }
 
     const isMoving = dx !== 0 || dz !== 0;

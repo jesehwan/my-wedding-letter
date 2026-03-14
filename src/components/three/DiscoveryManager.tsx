@@ -7,7 +7,7 @@ import { DiscoveryPoint } from "./DiscoveryPoint";
 import { DiscoveryPointData } from "@/types/discovery";
 import { discoveryPoints } from "@/data/weddingData";
 
-const TRIGGER_DISTANCE = 1.5;
+const TRIGGER_DISTANCE = 0.8;
 
 interface DiscoveryManagerProps {
   discoveredIds: Set<string>;

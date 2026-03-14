@@ -13,3 +13,4 @@ export const useThree = jest.fn(() => ({
 }));
 
 export const extend = jest.fn();
+export const useLoader = jest.fn();

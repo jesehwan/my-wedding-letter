@@ -6,7 +6,7 @@ interface EndingScreenProps {
 
 export function EndingScreen({ onClose }: EndingScreenProps) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
       <div className="mx-4 max-h-[90vh] max-w-lg overflow-y-auto rounded-2xl bg-white p-8 shadow-2xl">
         <h2 className="mb-6 text-center text-2xl font-semibold text-gray-800">
           우리의 이야기, 들어주셔서 고마워요
