@@ -16,6 +16,7 @@ import {
 interface EntranceSceneProps {
   joystickRef: MutableRefObject<JoystickInput>;
   onReachDoor: () => void;
+  cameraFlipped?: boolean;
 }
 
 function DoorTrigger({ onReachDoor }: { onReachDoor: () => void }) {
@@ -35,7 +36,7 @@ function DoorTrigger({ onReachDoor }: { onReachDoor: () => void }) {
   return null;
 }
 
-export function EntranceScene({ joystickRef, onReachDoor }: EntranceSceneProps) {
+export function EntranceScene({ joystickRef, onReachDoor, cameraFlipped }: EntranceSceneProps) {
   return (
     <Scene showGroundPlane={false}>
       {/* 바닥 */}
@@ -85,8 +86,9 @@ export function EntranceScene({ joystickRef, onReachDoor }: EntranceSceneProps) 
         walls={ENTRANCE_WALLS}
         worldBounds={ENTRANCE_WORLD_BOUNDS}
         initialPosition={[0, 0, 8]}
+        flipped={cameraFlipped}
       />
-      <CameraRig />
+      <CameraRig flipped={cameraFlipped} />
       <DoorTrigger onReachDoor={onReachDoor} />
     </Scene>
   );

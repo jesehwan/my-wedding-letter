@@ -25,6 +25,7 @@ export default function Experience({ onBack }: ExperienceProps) {
   const [discoveredIds, setDiscoveredIds] = useState<Set<string>>(new Set());
   const [showEnding, setShowEnding] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [cameraFlipped, setCameraFlipped] = useState(false);
   const joystickRef = useRef<JoystickInput>({ x: 0, y: 0 });
 
   const handleReachDoor = useCallback(() => {
@@ -77,6 +78,7 @@ export default function Experience({ onBack }: ExperienceProps) {
             <EntranceScene
               joystickRef={joystickRef}
               onReachDoor={handleReachDoor}
+              cameraFlipped={cameraFlipped}
             />
           ) : (
             <InteriorScene
@@ -84,12 +86,21 @@ export default function Experience({ onBack }: ExperienceProps) {
               discoveredIds={discoveredIds}
               activePoint={activeDiscovery}
               onDiscover={handleDiscover}
+              cameraFlipped={cameraFlipped}
             />
           )}
         </Suspense>
       </Canvas>
 
       <MobileJoystick joystickRef={joystickRef} />
+
+      <button
+        onClick={() => setCameraFlipped((prev) => !prev)}
+        className="fixed bottom-6 right-6 z-40 rounded-full bg-white/80 p-3 text-xl shadow backdrop-blur transition-colors hover:bg-white"
+        aria-label={cameraFlipped ? "카메라 원래대로" : "카메라 반전"}
+      >
+        {cameraFlipped ? "🔄" : "🔃"}
+      </button>
 
       {currentScene === "interior" && (
         <>

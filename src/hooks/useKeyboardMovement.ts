@@ -25,6 +25,7 @@ interface UseKeyboardMovementOptions {
   walls?: AABB[];
   worldBounds?: AABB;
   characterRadius?: number;
+  flipped?: boolean;
 }
 
 const CODE_MAP: Record<string, string> = {
@@ -83,6 +84,11 @@ export function useKeyboardMovement(options?: UseKeyboardMovementOptions) {
     if (joy && (joy.x !== 0 || joy.y !== 0)) {
       dx = joy.x;
       dz = -joy.y;
+    }
+
+    if (options?.flipped) {
+      dx = -dx;
+      dz = -dz;
     }
 
     const isMoving = dx !== 0 || dz !== 0;

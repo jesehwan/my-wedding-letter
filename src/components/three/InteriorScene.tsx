@@ -14,6 +14,7 @@ interface InteriorSceneProps {
   discoveredIds: Set<string>;
   activePoint: DiscoveryPointData | null;
   onDiscover: (point: DiscoveryPointData) => void;
+  cameraFlipped?: boolean;
 }
 
 export function InteriorScene({
@@ -21,6 +22,7 @@ export function InteriorScene({
   discoveredIds,
   activePoint,
   onDiscover,
+  cameraFlipped,
 }: InteriorSceneProps) {
   return (
     <Scene ambientIntensity={0.3}>
@@ -28,8 +30,9 @@ export function InteriorScene({
       <CharacterController
         joystickRef={joystickRef}
         initialPosition={[0, 0, -2.5]}
+        flipped={cameraFlipped}
       />
-      <CameraRig />
+      <CameraRig flipped={cameraFlipped} />
       <DiscoveryManager
         discoveredIds={discoveredIds}
         activePoint={activePoint}

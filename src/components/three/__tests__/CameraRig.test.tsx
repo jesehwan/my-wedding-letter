@@ -43,15 +43,32 @@ describe("CameraRig", () => {
     expect(() => render(<CameraRig />)).not.toThrow();
   });
 
-  it("moves camera toward character with offset", () => {
-    render(<CameraRig />);
+  it("uses default offset (z=4) when flipped is false", () => {
+    render(<CameraRig flipped={false} />);
 
     frameCallback({
       scene: { getObjectByName: (name: string) => name === "character" ? mockCharacter : undefined },
     });
 
+    // After one frame, camera should lerp toward character position + default offset (0, 2.5, 4)
     expect(mockCamera.position.z).toBeGreaterThan(0);
     expect(mockCamera.lookAt).toHaveBeenCalled();
+  });
+
+  it("uses flipped offset (z=-4) when flipped is true", () => {
+    render(<CameraRig flipped={true} />);
+
+    // Run multiple frames to let lerp converge
+    const scene = {
+      scene: { getObjectByName: (name: string) => name === "character" ? mockCharacter : undefined },
+    };
+
+    for (let i = 0; i < 50; i++) {
+      frameCallback(scene);
+    }
+
+    // After many frames, camera z should be negative (approaching -4)
+    expect(mockCamera.position.z).toBeLessThan(0);
   });
 
   it("does nothing when character is not found", () => {

@@ -12,6 +12,7 @@ interface CharacterControllerProps {
   worldBounds?: AABB;
   characterRadius?: number;
   initialPosition?: [number, number, number];
+  flipped?: boolean;
 }
 
 export function CharacterController({
@@ -20,12 +21,14 @@ export function CharacterController({
   worldBounds,
   characterRadius,
   initialPosition,
+  flipped,
 }: CharacterControllerProps) {
   const { groupRef, moveStateRef } = useKeyboardMovement({
     joystickRef,
     walls,
     worldBounds,
     characterRadius,
+    flipped,
   });
   const [animationState, setAnimationState] = useState<AnimationState>("idle");
   const prevAnimRef = useRef<AnimationState>("idle");
