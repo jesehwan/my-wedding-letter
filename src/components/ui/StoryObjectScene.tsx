@@ -38,17 +38,50 @@ function GameController() {
   );
 }
 
-function Pot() {
+function CuttingBoardAndKnife() {
   return (
     <group>
-      <mesh position={[0, 0, 0]}>
-        <cylinderGeometry args={[0.4, 0.35, 0.5, 32]} />
-        <meshStandardMaterial color="#c0c0c0" />
+      {/* 도마 */}
+      <mesh position={[0, 0, 0]} rotation={[0, 0.2, 0]}>
+        <boxGeometry args={[0.9, 0.08, 0.6]} />
+        <meshStandardMaterial color="#c8a06e" />
       </mesh>
-      <mesh position={[0, 0.25, 0]} rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[0.42, 0.03, 16, 32]} />
-        <meshStandardMaterial color="#a0a0a0" />
+      {/* 도마 손잡이 구멍 */}
+      <mesh position={[0.5, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0.2]}>
+        <torusGeometry args={[0.06, 0.02, 8, 16]} />
+        <meshStandardMaterial color="#a07840" />
       </mesh>
+      {/* 잘려진 당근 조각들 */}
+      <mesh position={[-0.2, 0.07, -0.1]}>
+        <cylinderGeometry args={[0.04, 0.04, 0.03, 12]} />
+        <meshStandardMaterial color="#ed8936" />
+      </mesh>
+      <mesh position={[-0.1, 0.07, -0.08]}>
+        <cylinderGeometry args={[0.04, 0.04, 0.03, 12]} />
+        <meshStandardMaterial color="#ed8936" />
+      </mesh>
+      <mesh position={[0.0, 0.07, -0.12]}>
+        <cylinderGeometry args={[0.04, 0.04, 0.03, 12]} />
+        <meshStandardMaterial color="#ed8936" />
+      </mesh>
+      {/* 아직 안 잘린 당근 몸통 */}
+      <mesh position={[-0.35, 0.08, -0.1]} rotation={[0, 0.2, Math.PI / 2]}>
+        <cylinderGeometry args={[0.03, 0.05, 0.2, 12]} />
+        <meshStandardMaterial color="#e07020" />
+      </mesh>
+      {/* 칼 (도마 위에 평평하게) */}
+      <group position={[0.05, 0.06, 0.1]} rotation={[0, -0.3, 0]}>
+        {/* 칼날 - 넓은 면이 위를 향하도록 (Y가 얇은 축) */}
+        <mesh position={[-0.15, 0, 0]}>
+          <boxGeometry args={[0.5, 0.02, 0.12]} />
+          <meshStandardMaterial color="#d0d0d0" metalness={0.6} roughness={0.3} />
+        </mesh>
+        {/* 칼 손잡이 */}
+        <mesh position={[0.25, 0, 0]}>
+          <boxGeometry args={[0.22, 0.04, 0.06]} />
+          <meshStandardMaterial color="#4a3520" />
+        </mesh>
+      </group>
     </group>
   );
 }
@@ -112,7 +145,7 @@ function Stars() {
 
 const story3DMap: Record<string, React.FC> = {
   "play-together": GameController,
-  kitchen: Pot,
+  kitchen: CuttingBoardAndKnife,
   study: Books,
   "light-switch": LightBulb,
   dream: Stars,

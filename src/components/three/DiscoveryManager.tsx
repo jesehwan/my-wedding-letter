@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Vector3 } from "three";
+import { Object3D, Vector3 } from "three";
 import { DiscoveryPoint } from "./DiscoveryPoint";
 import { DiscoveryPointData } from "@/types/discovery";
 import { discoveryPoints } from "@/data/weddingData";
@@ -21,11 +21,15 @@ export function DiscoveryManager({
   onDiscover,
 }: DiscoveryManagerProps) {
   const pointPos = useRef(new Vector3());
+  const characterRef = useRef<Object3D | null>(null);
 
   useFrame((state) => {
     if (activePoint) return;
 
-    const character = state.scene.getObjectByName("character");
+    if (!characterRef.current) {
+      characterRef.current = state.scene.getObjectByName("character") ?? null;
+    }
+    const character = characterRef.current;
     if (!character) return;
 
     for (const point of discoveryPoints) {

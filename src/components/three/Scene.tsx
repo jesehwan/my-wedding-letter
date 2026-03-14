@@ -23,7 +23,7 @@ export function Scene({
       {/* 밤하늘 배경 */}
       <color attach="background" args={["#0a0a2e"]} />
       <fog attach="fog" args={["#0a0a2e", 15, 40]} />
-      <Stars radius={100} depth={50} count={3000} factor={4} fade speed={1} />
+      <Stars radius={100} depth={50} count={1500} factor={4} fade speed={1} />
 
       {/* 야간 조명 */}
       <ambientLight intensity={ambientIntensity} />
@@ -32,8 +32,8 @@ export function Scene({
         intensity={directionalIntensity}
         color={directionalColor}
         castShadow
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}
+        shadow-mapSize-width={512}
+        shadow-mapSize-height={512}
       />
 
       {/* Ground plane */}

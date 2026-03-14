@@ -3,7 +3,7 @@
 import { Canvas } from "@react-three/fiber";
 import { AdaptiveDpr } from "@react-three/drei";
 import { NoToneMapping } from "three";
-import { Suspense, useState, useCallback, useRef, useEffect } from "react";
+import { Suspense, useState, useCallback, useRef, useEffect, useMemo } from "react";
 import { InteriorScene } from "./InteriorScene";
 import { Fireworks } from "./Fireworks";
 import { LoadingScreen } from "../ui/LoadingScreen";
@@ -28,6 +28,7 @@ export default function Experience({ onBack }: ExperienceProps) {
   const [cameraFlipped, setCameraFlipped] = useState(false);
   const [topDown, setTopDown] = useState(false);
   const joystickRef = useRef<JoystickInput>({ x: 0, y: 0 });
+  const maxDpr = useMemo(() => (typeof window !== "undefined" && window.innerWidth < 768 ? 1.5 : 2), []);
 
   const handleDiscover = useCallback(
     (point: DiscoveryPointData) => {
@@ -65,7 +66,7 @@ export default function Experience({ onBack }: ExperienceProps) {
         shadows
         camera={{ position: [0, 2.5, 4], fov: 60 }}
         onCreated={() => setIsLoaded(true)}
-        dpr={[1, 2]}
+        dpr={[1, maxDpr]}
         gl={{ toneMapping: NoToneMapping }}
       >
         <AdaptiveDpr pixelated />

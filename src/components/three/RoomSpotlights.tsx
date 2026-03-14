@@ -6,23 +6,23 @@ import { SpotLight, Object3D } from "three";
 interface RoomSpotlight {
   position: [number, number, number];
   target: [number, number, number];
+  castShadow: boolean;
 }
 
 export const ROOM_SPOTLIGHTS: RoomSpotlight[] = [
   // 좌상단 (주방)
-  { position: [-3, 8, -9], target: [-3, 0, -9] },
+  { position: [-3, 8, -9], target: [-3, 0, -9], castShadow: false },
   // 우상단
-  { position: [3, 8, -9], target: [3, 0, -9] },
+  { position: [3, 8, -9], target: [3, 0, -9], castShadow: false },
   // 좌하단 (거실)
-  { position: [-3, 8, -2.5], target: [-3, 0, -2.5] },
+  { position: [-3, 8, -2.5], target: [-3, 0, -2.5], castShadow: true },
   // 우하단 (서재)
-  { position: [3.5, 8, -2.5], target: [3.5, 0, -2.5] },
+  { position: [3.5, 8, -2.5], target: [3.5, 0, -2.5], castShadow: true },
   // 베란다
-  { position: [0.35, 8, -12], target: [0.35, 0, -12] },
-
+  { position: [0.35, 8, -12], target: [0.35, 0, -12], castShadow: false },
 ];
 
-function RoomSpot({ position, target }: RoomSpotlight) {
+function RoomSpot({ position, target, castShadow }: RoomSpotlight) {
   const lightRef = useRef<SpotLight>(null);
   const targetRef = useRef<Object3D>(null);
 
@@ -41,7 +41,9 @@ function RoomSpot({ position, target }: RoomSpotlight) {
         angle={Math.PI / 8}
         penumbra={1}
         decay={1.1}
-        castShadow
+        castShadow={castShadow}
+        shadow-mapSize-width={512}
+        shadow-mapSize-height={512}
         color="#f3dfb8"
       />
       <object3D ref={targetRef} position={target} />

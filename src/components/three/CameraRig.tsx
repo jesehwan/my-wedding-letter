@@ -2,7 +2,7 @@
 
 import { useFrame, useThree } from "@react-three/fiber";
 import { MutableRefObject, useRef } from "react";
-import { Box3, Ray, Vector3 } from "three";
+import { Box3, Object3D, Ray, Vector3 } from "three";
 import { HOUSE_WALLS } from "@/lib/collisionConfig";
 
 const CAMERA_RADIUS = 4;
@@ -27,17 +27,25 @@ const wallBoxes = HOUSE_WALLS.map(
     ),
 );
 
+// Reusable objects to avoid per-frame allocation
+const _camPos = new Vector3();
+const _direction = new Vector3();
+const _ray = new Ray();
+
 /** Check if a camera angle is blocked by any wall AABB */
 export function isAngleBlocked(charPos: Vector3, angle: number): boolean {
-  const camPos = new Vector3(
+  _camPos.set(
     charPos.x + Math.sin(angle) * CAMERA_RADIUS,
     charPos.y + CAMERA_HEIGHT,
     charPos.z + Math.cos(angle) * CAMERA_RADIUS,
   );
-  const direction = new Vector3().subVectors(charPos, camPos).normalize();
-  const ray = new Ray(camPos, direction);
-  return wallBoxes.some((box) => ray.intersectsBox(box));
+  _direction.subVectors(charPos, _camPos).normalize();
+  _ray.origin.copy(_camPos);
+  _ray.direction.copy(_direction);
+  return wallBoxes.some((box) => _ray.intersectsBox(box));
 }
+
+const RAYCAST_INTERVAL = 4;
 
 /** Find an unblocked angle, preferring the desired angle */
 function findUnblockedAngle(charPos: Vector3, desiredAngle: number): number {
@@ -68,9 +76,15 @@ export function CameraRig({ flipped = false, topDown = false, lookUpMode = false
   const targetPos = useRef(new Vector3());
   const lookAtTarget = useRef(new Vector3());
   const currentAngle = useRef(ANGLE_DEFAULT);
+  const characterRef = useRef<Object3D | null>(null);
+  const frameCount = useRef(0);
+  const cachedDesiredAngle = useRef(ANGLE_DEFAULT);
 
   useFrame((state) => {
-    const character = state.scene.getObjectByName("character");
+    if (!characterRef.current) {
+      characterRef.current = state.scene.getObjectByName("character") ?? null;
+    }
+    const character = characterRef.current;
 
     if (lookUpMode) {
       // 집 앞 멀리서 집+하늘을 함께 조망하는 위치
@@ -89,9 +103,12 @@ export function CameraRig({ flipped = false, topDown = false, lookUpMode = false
           character.position.z,
         );
       } else {
-        const baseAngle = flipped ? ANGLE_FLIPPED : ANGLE_DEFAULT;
-        const desiredAngle = findUnblockedAngle(character.position, baseAngle);
-        currentAngle.current += (desiredAngle - currentAngle.current) * LERP_FACTOR;
+        frameCount.current++;
+        if (frameCount.current % RAYCAST_INTERVAL === 0) {
+          const baseAngle = flipped ? ANGLE_FLIPPED : ANGLE_DEFAULT;
+          cachedDesiredAngle.current = findUnblockedAngle(character.position, baseAngle);
+        }
+        currentAngle.current += (cachedDesiredAngle.current - currentAngle.current) * LERP_FACTOR;
 
         // Share current angle for camera-relative input
         if (cameraAngleRef) {
