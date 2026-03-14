@@ -1,7 +1,7 @@
 "use client";
 
 import { forwardRef, useEffect, useMemo, useRef } from "react";
-import { Group, KeyframeTrack } from "three";
+import { Group, KeyframeTrack, SRGBColorSpace, MeshStandardMaterial } from "three";
 import { useFBX, useAnimations } from "@react-three/drei";
 
 export type AnimationState = "idle" | "walk";
@@ -44,6 +44,23 @@ export const Character = forwardRef<Group, CharacterProps>(function Character(
     idleModel.traverse((child: any) => {
       if (child.isMesh) {
         child.castShadow = true;
+        const mats = Array.isArray(child.material)
+          ? child.material
+          : [child.material];
+        const converted = mats.map((mat: any) => {
+          if (mat.map) {
+            mat.map.colorSpace = SRGBColorSpace;
+          }
+          return new MeshStandardMaterial({
+            color: mat.color,
+            map: mat.map ?? null,
+            transparent: mat.transparent,
+            opacity: mat.opacity,
+            roughness: 1,
+            metalness: 0,
+          });
+        });
+        child.material = converted.length === 1 ? converted[0] : converted;
       }
     });
   }, [idleModel]);

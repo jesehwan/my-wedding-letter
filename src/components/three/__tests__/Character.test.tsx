@@ -6,7 +6,6 @@ jest.mock("@react-three/fiber", () => ({
   useFrame: jest.fn(),
 }));
 
-jest.mock("three", () => require("../../../../__mocks__/three"));
 
 const mockFadeIn = jest.fn(() => ({ play: jest.fn() }));
 const mockReset = jest.fn(() => ({ fadeIn: mockFadeIn }));

@@ -2,6 +2,7 @@
 
 import { Canvas } from "@react-three/fiber";
 import { AdaptiveDpr } from "@react-three/drei";
+import { NoToneMapping } from "three";
 import { Suspense, useState, useCallback, useRef, useEffect } from "react";
 import { InteriorScene } from "./InteriorScene";
 import { Fireworks } from "./Fireworks";
@@ -65,6 +66,7 @@ export default function Experience({ onBack }: ExperienceProps) {
         camera={{ position: [0, 2.5, 4], fov: 60 }}
         onCreated={() => setIsLoaded(true)}
         dpr={[1, 2]}
+        gl={{ toneMapping: NoToneMapping }}
       >
         <AdaptiveDpr pixelated />
         <Suspense fallback={null}>

@@ -14,8 +14,8 @@ interface SceneProps {
 export function Scene({
   children,
   ambientIntensity = 3,
-  directionalIntensity = 1.5,
-  directionalColor = "#b0c4de",
+  directionalIntensity = 0.6,
+  directionalColor = "#f4eee4",
   showGroundPlane = true,
 }: SceneProps) {
   return (

@@ -2,15 +2,15 @@ import { WeddingInfoData } from "@/types/wedding";
 import { DiscoveryPointData } from "@/types/discovery";
 
 export const weddingData: WeddingInfoData = {
-  date: "2026년 5월 23일 토요일",
-  time: "오후 2시",
-  venue: "더채플앳청담",
-  address: "서울특별시 강남구 청담동 123-45",
+  date: "2026년 5월 2일 토요일",
+  time: "오후 4시",
+  venue: "오륜교회 1층 그레이스홀",
+  address: "서울특별시 강동구 강동대로 235 (성내동 449-7)",
   couple: {
-    groomName: "김신랑",
-    brideName: "이신부",
-    groomFamilyName: "김",
-    brideFamilyName: "이",
+    groomName: "제세환",
+    brideName: "신지은",
+    groomFamilyName: "제",
+    brideFamilyName: "신",
   },
 };
 
@@ -48,7 +48,7 @@ export const discoveryPoints: DiscoveryPointData[] = [
     position: [3.2, 0.5, -3],
     title: "지은의 비밀 공간",
     content:
-      "기록하고 정리하는 걸 좋아하는 지은만의 서재예요. 다이어리, 스크랩북, 정리된 책장... 이 작은 공간에서 지은은 하루를 돌아보고, 내일을 계획해요. 세환은 가끔 몰래 들어와서 쪽지를 남기곤 해요.",
+      "기록하고 정리하는 걸 좋아하는 지은만의 서재예요. 다이어리, 스크랩북, 정리된 책장... 이 작은 공간에서 지은은 하루를 돌아보고, 내일을 계획해요. 세환은 그런 지은을 신기하게 쳐다보곤 해요.",
   },
   {
     id: "play-together",

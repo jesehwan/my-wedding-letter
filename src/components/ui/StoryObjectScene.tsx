@@ -14,29 +14,10 @@ function AutoRotate({ children }: { children: React.ReactNode }) {
   return <group ref={ref}>{children}</group>;
 }
 
-function Notebook() {
-  return (
-    <group>
-      <mesh position={[0, 0, 0]}>
-        <boxGeometry args={[1.2, 0.08, 0.9]} />
-        <meshStandardMaterial color="#555555" />
-      </mesh>
-      <mesh position={[0, 0.06, 0]}>
-        <boxGeometry args={[1.1, 0.02, 0.8]} />
-        <meshStandardMaterial color="#222222" />
-      </mesh>
-    </group>
-  );
-}
-
-function Poster() {
-  return (
-    <mesh>
-      <planeGeometry args={[0.7, 1.0]} />
-      <meshStandardMaterial color="#f5e6d3" side={THREE.DoubleSide} />
-    </mesh>
-  );
-}
+const storyImageMap: Record<string, string> = {
+  "first-met": "/models/tex/us.JPG",
+  motto: "/models/tex/poster.png",
+};
 
 function GameController() {
   return (
@@ -129,9 +110,7 @@ function Stars() {
   );
 }
 
-const storyObjectMap: Record<string, React.FC> = {
-  "first-met": Notebook,
-  motto: Poster,
+const story3DMap: Record<string, React.FC> = {
   "play-together": GameController,
   kitchen: Pot,
   study: Books,
@@ -144,12 +123,24 @@ interface StoryObjectSceneProps {
 }
 
 export function StoryObjectScene({ storyId }: StoryObjectSceneProps) {
-  const ObjectComponent = storyObjectMap[storyId];
+  const imageSrc = storyImageMap[storyId];
+  if (imageSrc) {
+    return (
+      <div className="mb-3 flex h-80 w-full items-center justify-center rounded-lg bg-gradient-to-b from-gray-100 to-gray-200">
+        <img
+          src={imageSrc}
+          alt={storyId}
+          className="max-h-full max-w-full rounded object-contain"
+        />
+      </div>
+    );
+  }
 
+  const ObjectComponent = story3DMap[storyId];
   if (!ObjectComponent) return null;
 
   return (
-    <div className="mb-3 h-40 w-full rounded-lg bg-gradient-to-b from-gray-100 to-gray-200">
+    <div className="mb-3 h-80 w-full rounded-lg bg-gradient-to-b from-gray-100 to-gray-200">
       <Canvas camera={{ position: [0, 0.5, 2.5], fov: 45 }}>
         <ambientLight intensity={0.6} />
         <directionalLight position={[2, 3, 2]} intensity={0.8} />

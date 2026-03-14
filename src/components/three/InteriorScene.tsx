@@ -7,7 +7,7 @@ import { CharacterController } from "./CharacterController";
 import { CameraRig } from "./CameraRig";
 import { DiscoveryManager } from "./DiscoveryManager";
 import { RoomSpotlights } from "./RoomSpotlights";
-import { DebugWalls } from "./DebugWalls";
+import { NPCController } from "./NPCController";
 import { DiscoveryPointData } from "@/types/discovery";
 import { JoystickInput } from "@/hooks/useKeyboardMovement";
 
@@ -36,7 +36,6 @@ export function InteriorScene({
     <Scene ambientIntensity={0.08}>
       <House />
       <RoomSpotlights />
-      <DebugWalls />
       <CharacterController
         joystickRef={joystickRef}
         initialPosition={[0, 0, -2.5]}
@@ -44,6 +43,7 @@ export function InteriorScene({
         topDown={topDown}
       />
       <CameraRig flipped={cameraFlipped} topDown={topDown} lookUpMode={lookUpMode} cameraAngleRef={cameraAngleRef} />
+      <NPCController />
       <DiscoveryManager
         discoveredIds={discoveredIds}
         activePoint={activePoint}

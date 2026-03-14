@@ -6,7 +6,7 @@ describe("ExploreButton", () => {
     render(<ExploreButton onClick={() => {}} />);
 
     expect(
-      screen.getByRole("button", { name: "살펴보기" })
+      screen.getByRole("button", { name: "신혼집 구경하기" })
     ).toBeInTheDocument();
   });
 
@@ -14,7 +14,7 @@ describe("ExploreButton", () => {
     const onClick = jest.fn();
     render(<ExploreButton onClick={onClick} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "살펴보기" }));
+    fireEvent.click(screen.getByRole("button", { name: "신혼집 구경하기" }));
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 });

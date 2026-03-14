@@ -267,3 +267,14 @@ export class PointsMaterial {}
 export const AdditiveBlending = 2;
 export const DoubleSide = 2;
 export const FrontSide = 0;
+export const SRGBColorSpace = "srgb";
+export const NoToneMapping = 0;
+
+export class KeyframeTrack {
+  name: string;
+  values: number[];
+  constructor(name = "", times: number[] = [], values: number[] = []) {
+    this.name = name;
+    this.values = values;
+  }
+}

@@ -21,7 +21,7 @@ describe("LandingSection", () => {
     const onExplore = jest.fn();
     render(<LandingSection onExplore={onExplore} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "살펴보기" }));
+    fireEvent.click(screen.getByRole("button", { name: "신혼집 구경하기" }));
     expect(onExplore).toHaveBeenCalledTimes(1);
   });
 });

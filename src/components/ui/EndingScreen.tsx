@@ -1,5 +1,7 @@
 "use client";
 
+import { weddingData } from "@/data/weddingData";
+
 interface EndingScreenProps {
   onClose: () => void;
 }
@@ -21,7 +23,7 @@ export function EndingScreen({ onClose }: EndingScreenProps) {
             저희가 이제 평생을 함께하기로 했습니다.
           </p>
           <p>
-            &ldquo;평범하게 살지 말고, 한번 사는 인생 한탕 크게 하자!&rdquo;
+            &ldquo;받아들일 수 없다면, 들이받으세요&rdquo;
             라는 다짐처럼, 앞으로도 서로의 손을 잡고 신나게 살아보려 합니다.
           </p>
           <p>
@@ -32,13 +34,13 @@ export function EndingScreen({ onClose }: EndingScreenProps) {
         <div className="mb-6 rounded-xl bg-rose-50 p-5 text-center">
           <p className="mb-1 text-sm text-rose-400">Wedding Day</p>
           <p className="text-lg font-semibold text-gray-800">
-            2026년 5월 23일 토요일 오후 2시
+            {weddingData.date} {weddingData.time}
           </p>
           <p className="mt-1 text-sm text-gray-500">
-            더채플앳청담
+            {weddingData.venue}
           </p>
           <p className="text-xs text-gray-400">
-            서울특별시 강남구 청담동 123-45
+            {weddingData.address}
           </p>
         </div>
 

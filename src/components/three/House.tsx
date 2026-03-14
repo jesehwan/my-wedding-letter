@@ -3,7 +3,14 @@
 import { useEffect } from "react";
 import { useLoader } from "@react-three/fiber";
 import { FBXLoader } from "three-stdlib";
-import { Box3, Vector3, SRGBColorSpace, MeshStandardMaterial } from "three";
+import {
+  Box3,
+  Vector3,
+  SRGBColorSpace,
+  MeshStandardMaterial,
+  TextureLoader,
+  DoubleSide,
+} from "three";
 
 const HOUSE_OFFSET = new Vector3(0, -0.14, -6);
 
@@ -11,6 +18,8 @@ export function House() {
   const model = useLoader(FBXLoader, "/models/house_final.fbx", (loader) => {
     loader.setResourcePath("/models/tex/");
   });
+  const posterTexture = useLoader(TextureLoader, "/models/tex/poster.png");
+  const usTexture = useLoader(TextureLoader, "/models/tex/us.JPG");
 
   useEffect(() => {
     // 부모 group 없이 로컬 좌표만으로 센터링 (월드 좌표 간섭 방지)
@@ -35,6 +44,21 @@ export function House() {
         child.castShadow = true;
         child.receiveShadow = true;
 
+        if (child.name === "Plane" || child.name === "plane") {
+          posterTexture.colorSpace = SRGBColorSpace;
+          child.material = new MeshStandardMaterial({
+            map: posterTexture,
+            side: DoubleSide,
+            roughness: 1,
+            metalness: 0,
+          });
+          return;
+        }
+
+        if (child.name === "Picture9_Colors_0") {
+          return;
+        }
+
         const mats = Array.isArray(child.material)
           ? child.material
           : [child.material];
@@ -54,7 +78,23 @@ export function House() {
         child.material = converted.length === 1 ? converted[0] : converted;
       }
     });
-  }, [model]);
+  }, [model, posterTexture, usTexture]);
 
-  return <primitive object={model} />;
+  return (
+    <>
+      <primitive object={model} />
+      <mesh
+        position={[-4.64, 1.327, -3.947]}
+        rotation={[0, Math.PI / 2, 0]}
+      >
+        <planeGeometry args={[0.40, 0.30]} />
+        <meshStandardMaterial
+          map={usTexture}
+          side={DoubleSide}
+          roughness={1}
+          metalness={0}
+        />
+      </mesh>
+    </>
+  );
 }

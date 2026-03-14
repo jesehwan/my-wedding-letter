@@ -13,7 +13,7 @@ describe("EndingScreen", () => {
   it("renders wedding info", () => {
     render(<EndingScreen onClose={() => {}} />);
 
-    expect(screen.getByText(/2026년 5월 23일/)).toBeInTheDocument();
+    expect(screen.getByText(/2026년 5월 2일/)).toBeInTheDocument();
   });
 
   it("renders celebration button", () => {
