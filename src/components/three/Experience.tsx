@@ -2,9 +2,9 @@
 
 import { Canvas } from "@react-three/fiber";
 import { AdaptiveDpr } from "@react-three/drei";
-import { Suspense, useState, useCallback, useRef } from "react";
-import { EntranceScene } from "./EntranceScene";
+import { Suspense, useState, useCallback, useRef, useEffect } from "react";
 import { InteriorScene } from "./InteriorScene";
+import { Fireworks } from "./Fireworks";
 import { LoadingScreen } from "../ui/LoadingScreen";
 import { StoryPopup } from "../ui/StoryPopup";
 import { EndingScreen } from "../ui/EndingScreen";
@@ -18,24 +18,15 @@ interface ExperienceProps {
 }
 
 export default function Experience({ onBack }: ExperienceProps) {
-  const [currentScene, setCurrentScene] = useState<"entrance" | "interior">("entrance");
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const [activeDiscovery, setActiveDiscovery] =
     useState<DiscoveryPointData | null>(null);
   const [discoveredIds, setDiscoveredIds] = useState<Set<string>>(new Set());
   const [showEnding, setShowEnding] = useState(false);
+  const [endingPhase, setEndingPhase] = useState<"fireworks" | "popup" | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [cameraFlipped, setCameraFlipped] = useState(false);
+  const [topDown, setTopDown] = useState(false);
   const joystickRef = useRef<JoystickInput>({ x: 0, y: 0 });
-
-  const handleReachDoor = useCallback(() => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentScene("interior");
-      setIsTransitioning(false);
-    }, 400);
-  }, [isTransitioning]);
 
   const handleDiscover = useCallback(
     (point: DiscoveryPointData) => {
@@ -51,6 +42,7 @@ export default function Experience({ onBack }: ExperienceProps) {
         const next = new Set(prev).add(activeDiscovery.id);
         if (next.size === discoveryPoints.length) {
           setShowEnding(true);
+          setEndingPhase("fireworks");
         }
         return next;
       });
@@ -58,13 +50,15 @@ export default function Experience({ onBack }: ExperienceProps) {
     }
   }, [activeDiscovery]);
 
+  useEffect(() => {
+    if (endingPhase !== "fireworks") return;
+    const timer = setTimeout(() => setEndingPhase("popup"), 4000);
+    return () => clearTimeout(timer);
+  }, [endingPhase]);
+
   return (
     <div className="fixed inset-0">
       {!isLoaded && <LoadingScreen />}
-
-      {isTransitioning && (
-        <div className="fixed inset-0 z-50 bg-white transition-opacity duration-300" />
-      )}
 
       <Canvas
         shadows
@@ -74,22 +68,17 @@ export default function Experience({ onBack }: ExperienceProps) {
       >
         <AdaptiveDpr pixelated />
         <Suspense fallback={null}>
-          {currentScene === "entrance" ? (
-            <EntranceScene
-              joystickRef={joystickRef}
-              onReachDoor={handleReachDoor}
-              cameraFlipped={cameraFlipped}
-            />
-          ) : (
-            <InteriorScene
-              joystickRef={joystickRef}
-              discoveredIds={discoveredIds}
-              activePoint={activeDiscovery}
-              onDiscover={handleDiscover}
-              cameraFlipped={cameraFlipped}
-            />
-          )}
+          <InteriorScene
+            joystickRef={joystickRef}
+            discoveredIds={discoveredIds}
+            activePoint={activeDiscovery}
+            onDiscover={handleDiscover}
+            cameraFlipped={cameraFlipped}
+            topDown={topDown}
+            lookUpMode={endingPhase === "fireworks"}
+          />
         </Suspense>
+        {showEnding && <Fireworks />}
       </Canvas>
 
       <MobileJoystick joystickRef={joystickRef} />
@@ -102,20 +91,24 @@ export default function Experience({ onBack }: ExperienceProps) {
         {cameraFlipped ? "🔄" : "🔃"}
       </button>
 
-      {currentScene === "interior" && (
-        <>
-          <div className="fixed right-4 top-4 z-40 rounded-full bg-white/80 px-4 py-2 text-sm text-gray-600 shadow backdrop-blur">
-            {discoveredIds.size} / {discoveryPoints.length}
-          </div>
+      <button
+        onClick={() => setTopDown((prev) => !prev)}
+        className="fixed bottom-6 right-20 z-40 rounded-full bg-white/80 p-3 text-xl shadow backdrop-blur transition-colors hover:bg-white"
+        aria-label={topDown ? "기본 시점" : "탑뷰"}
+      >
+        {topDown ? "👤" : "🔽"}
+      </button>
 
-          {activeDiscovery && (
-            <StoryPopup point={activeDiscovery} onClose={handleClosePopup} />
-          )}
+      <div className="fixed right-4 top-4 z-40 rounded-full bg-white/80 px-4 py-2 text-sm text-gray-600 shadow backdrop-blur">
+        {discoveredIds.size} / {discoveryPoints.length}
+      </div>
 
-          {showEnding && (
-            <EndingScreen onClose={() => setShowEnding(false)} />
-          )}
-        </>
+      {activeDiscovery && (
+        <StoryPopup point={activeDiscovery} onClose={handleClosePopup} />
+      )}
+
+      {endingPhase === "popup" && (
+        <EndingScreen onClose={() => { setEndingPhase(null); }} />
       )}
 
       {onBack && (
