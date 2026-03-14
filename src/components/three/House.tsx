@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
-import { useFBX } from "@react-three/drei";
-import { Box3, Vector3 } from "three";
+import { useFBX, useTexture } from "@react-three/drei";
+import { Box3, Vector3, MeshStandardMaterial } from "three";
 
 export function House() {
   const model = useFBX("/models/hause2.fbx");
+  const texture = useTexture("/models/tex/Colors_diffuse.png");
 
   useEffect(() => {
     // 원점 보정: 모델 중심을 원점으로 이동
@@ -19,11 +20,12 @@ export function House() {
 
     model.traverse((child: any) => {
       if (child.isMesh) {
+        child.material = new MeshStandardMaterial({ map: texture });
         child.castShadow = true;
         child.receiveShadow = true;
       }
     });
-  }, [model]);
+  }, [model, texture]);
 
   return (
     <group position={[0, 0, -5]}>

@@ -54,5 +54,6 @@ export const useAnimations = jest.fn(() => ({
   },
   ref: { current: null },
 }));
+export const useTexture = jest.fn(() => ({}));
 export const AdaptiveDpr = () => null;
 export const Stars = () => null;
