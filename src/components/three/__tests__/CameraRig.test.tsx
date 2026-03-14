@@ -109,7 +109,7 @@ describe("CameraRig", () => {
     // Camera should be near the fixed panoramic position (0, 5, 5)
     expect(mockCamera.position.x).toBeCloseTo(0, 0);
     expect(mockCamera.position.y).toBeCloseTo(5, 0);
-    expect(mockCamera.position.z).toBeCloseTo(8, 0);
+    expect(mockCamera.position.z).toBeCloseTo(5, 0);
     // Should look at sky above house (0, 6, -6)
     expect(mockCamera.lookAt).toHaveBeenCalledWith(
       expect.objectContaining({ x: 0, y: 6, z: -6 })

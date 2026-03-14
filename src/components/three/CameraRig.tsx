@@ -74,7 +74,7 @@ export function CameraRig({ flipped = false, topDown = false, lookUpMode = false
 
     if (lookUpMode) {
       // 집 앞 멀리서 집+하늘을 함께 조망하는 위치
-      targetPos.current.set(0, 5, 8);
+      targetPos.current.set(0, 5, 5);
       camera.position.lerp(targetPos.current, LERP_FACTOR);
       lookAtTarget.current.set(0, 6, -6);
       camera.lookAt(lookAtTarget.current);
