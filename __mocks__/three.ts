@@ -137,7 +137,21 @@ export class Object3D {
 
 export class Group extends Object3D {}
 export class Mesh extends Object3D {}
-export class Scene extends Object3D {}
+export class SkinnedMesh extends Mesh {}
+export class Bone extends Object3D {}
+export class Skeleton {
+  bones: Bone[] = [];
+}
+export class Scene extends Object3D {
+  children: Object3D[] = [];
+  traverse(callback: (obj: Object3D) => void) {
+    callback(this);
+    this.children.forEach((child) => child instanceof Scene ? child.traverse(callback) : callback(child));
+  }
+  clone() {
+    return new Scene();
+  }
+}
 export class Camera extends Object3D {}
 
 export class AmbientLight extends Object3D {}
@@ -149,6 +163,33 @@ export class CapsuleGeometry {}
 export class PlaneGeometry {}
 export class MeshStandardMaterial {}
 export class MeshBasicMaterial {}
+
+export class AnimationClip {
+  name: string;
+  duration: number;
+  constructor(name = "", duration = 0) {
+    this.name = name;
+    this.duration = duration;
+  }
+}
+
+export class AnimationMixer {
+  _root: Object3D;
+  constructor(root: Object3D) {
+    this._root = root;
+  }
+  clipAction(_clip: AnimationClip) {
+    return {
+      reset: () => ({ fadeIn: () => ({ play: () => {} }) }),
+      fadeIn: () => ({ play: () => {} }),
+      fadeOut: () => ({ stop: () => {} }),
+      play: () => {},
+      stop: () => {},
+      crossFadeTo: () => {},
+    };
+  }
+  update(_delta: number) {}
+}
 
 export const DoubleSide = 2;
 export const FrontSide = 0;

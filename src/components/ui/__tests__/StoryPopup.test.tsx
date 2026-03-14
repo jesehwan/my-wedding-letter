@@ -38,4 +38,17 @@ describe("StoryPopup", () => {
     expect(img).toBeInTheDocument();
     expect(img).toHaveAttribute("src", "/test.jpg");
   });
+
+  it("renders 3D object scene for known story id", () => {
+    const knownPoint = { ...point, id: "first-met" };
+    render(<StoryPopup point={knownPoint} onClose={() => {}} />);
+
+    expect(screen.getByTestId("r3f-canvas")).toBeInTheDocument();
+  });
+
+  it("does not render 3D object scene for unknown story id", () => {
+    render(<StoryPopup point={point} onClose={() => {}} />);
+
+    expect(screen.queryByTestId("r3f-canvas")).not.toBeInTheDocument();
+  });
 });

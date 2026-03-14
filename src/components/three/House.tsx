@@ -1,66 +1,33 @@
 "use client";
 
+import { useEffect } from "react";
+import { useFBX } from "@react-three/drei";
+import { Box3, Vector3 } from "three";
+
 export function House() {
-  const wallColor = "#f5f0e8";
-  const wallHeight = 2.5;
-  const wallThickness = 0.2;
+  const model = useFBX("/models/hause2.fbx");
+
+  useEffect(() => {
+    // 원점 보정: 모델 중심을 원점으로 이동
+    const box = new Box3().setFromObject(model);
+    const center = new Vector3();
+    box.getCenter(center);
+    model.position.sub(center);
+    // 바닥을 y=0에 맞춤
+    const newBox = new Box3().setFromObject(model);
+    model.position.y -= newBox.min.y;
+
+    model.traverse((child: any) => {
+      if (child.isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+    });
+  }, [model]);
 
   return (
-    <group>
-      {/* Floor */}
-      <mesh position={[0, 0.01, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <planeGeometry args={[10, 10]} />
-        <meshStandardMaterial color="#deb887" />
-      </mesh>
-
-      {/* Back wall */}
-      <mesh position={[0, wallHeight / 2, -5]} castShadow>
-        <boxGeometry args={[10, wallHeight, wallThickness]} />
-        <meshStandardMaterial color={wallColor} />
-      </mesh>
-
-      {/* Left wall */}
-      <mesh position={[-5, wallHeight / 2, 0]} castShadow>
-        <boxGeometry args={[wallThickness, wallHeight, 10]} />
-        <meshStandardMaterial color={wallColor} />
-      </mesh>
-
-      {/* Right wall */}
-      <mesh position={[5, wallHeight / 2, 0]} castShadow>
-        <boxGeometry args={[wallThickness, wallHeight, 10]} />
-        <meshStandardMaterial color={wallColor} />
-      </mesh>
-
-      {/* Front wall left */}
-      <mesh position={[-3, wallHeight / 2, 5]} castShadow>
-        <boxGeometry args={[4, wallHeight, wallThickness]} />
-        <meshStandardMaterial color={wallColor} />
-      </mesh>
-
-      {/* Front wall right */}
-      <mesh position={[3, wallHeight / 2, 5]} castShadow>
-        <boxGeometry args={[4, wallHeight, wallThickness]} />
-        <meshStandardMaterial color={wallColor} />
-      </mesh>
-
-      {/* Simple furniture placeholders */}
-      {/* Sofa */}
-      <mesh position={[-3, 0.4, -3]} castShadow>
-        <boxGeometry args={[2, 0.8, 0.8]} />
-        <meshStandardMaterial color="#8b7355" />
-      </mesh>
-
-      {/* Table */}
-      <mesh position={[0, 0.35, 0]} castShadow>
-        <boxGeometry args={[1.2, 0.7, 0.8]} />
-        <meshStandardMaterial color="#a0522d" />
-      </mesh>
-
-      {/* Bed */}
-      <mesh position={[3, 0.3, -3]} castShadow>
-        <boxGeometry args={[2, 0.6, 1.5]} />
-        <meshStandardMaterial color="#f0e6d3" />
-      </mesh>
+    <group position={[0, 0, -5]}>
+      <primitive object={model} scale={[0.01, 0.01, 0.01]} />
     </group>
   );
 }

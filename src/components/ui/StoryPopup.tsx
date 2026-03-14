@@ -1,6 +1,7 @@
 "use client";
 
 import { DiscoveryPointData } from "@/types/discovery";
+import { StoryObjectScene } from "./StoryObjectScene";
 
 interface StoryPopupProps {
   point: DiscoveryPointData;
@@ -14,6 +15,8 @@ export function StoryPopup({ point, onClose }: StoryPopupProps) {
         <h2 className="mb-3 text-xl font-semibold text-gray-800">
           {point.title}
         </h2>
+
+        <StoryObjectScene storyId={point.id} />
 
         {point.imageUrl && (
           <img

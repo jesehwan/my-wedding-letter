@@ -1,13 +1,13 @@
 "use client";
 
-import { useRef, useCallback, useEffect, useState } from "react";
-import { JoystickInput } from "@/types/discovery";
+import { useRef, useCallback, useEffect, useState, MutableRefObject } from "react";
+import { JoystickInput } from "@/hooks/useKeyboardMovement";
 
 interface MobileJoystickProps {
-  onMove: (input: JoystickInput) => void;
+  joystickRef: MutableRefObject<JoystickInput>;
 }
 
-export function MobileJoystick({ onMove }: MobileJoystickProps) {
+export function MobileJoystick({ joystickRef }: MobileJoystickProps) {
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const baseRef = useRef<HTMLDivElement>(null);
   const knobRef = useRef<HTMLDivElement>(null);
@@ -17,14 +17,10 @@ export function MobileJoystick({ onMove }: MobileJoystickProps) {
     setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
   }, []);
 
-  const handleTouchStart = useCallback(
-    (e: React.TouchEvent) => {
-      if (activeTouch.current !== null) return;
-      const touch = e.touches[0];
-      activeTouch.current = touch.identifier;
-    },
-    []
-  );
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    if (activeTouch.current !== null) return;
+    activeTouch.current = e.touches[0].identifier;
+  }, []);
 
   const handleTouchMove = useCallback(
     (e: React.TouchEvent) => {
@@ -38,8 +34,8 @@ export function MobileJoystick({ onMove }: MobileJoystickProps) {
       const rect = baseRef.current.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
-
       const maxRadius = rect.width / 2;
+
       let dx = touch.clientX - centerX;
       let dy = touch.clientY - centerY;
 
@@ -53,9 +49,9 @@ export function MobileJoystick({ onMove }: MobileJoystickProps) {
         knobRef.current.style.transform = `translate(${dx}px, ${dy}px)`;
       }
 
-      onMove({ x: dx / maxRadius, y: -dy / maxRadius });
+      joystickRef.current = { x: dx / maxRadius, y: -dy / maxRadius };
     },
-    [onMove]
+    [joystickRef]
   );
 
   const handleTouchEnd = useCallback(() => {
@@ -63,8 +59,8 @@ export function MobileJoystick({ onMove }: MobileJoystickProps) {
     if (knobRef.current) {
       knobRef.current.style.transform = "translate(0px, 0px)";
     }
-    onMove({ x: 0, y: 0 });
-  }, [onMove]);
+    joystickRef.current = { x: 0, y: 0 };
+  }, [joystickRef]);
 
   if (!isTouchDevice) return null;
 
@@ -79,7 +75,7 @@ export function MobileJoystick({ onMove }: MobileJoystickProps) {
     >
       <div
         ref={knobRef}
-        className="h-12 w-12 rounded-full bg-white/60 shadow-lg transition-transform"
+        className="h-12 w-12 rounded-full bg-white/60 shadow-lg"
       />
     </div>
   );

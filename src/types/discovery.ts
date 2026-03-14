@@ -6,14 +6,3 @@ export interface DiscoveryPointData {
   imageUrl?: string;
 }
 
-export interface MovementInput {
-  forward: boolean;
-  backward: boolean;
-  left: boolean;
-  right: boolean;
-}
-
-export interface JoystickInput {
-  x: number;
-  y: number;
-}

@@ -9,15 +9,18 @@ interface DiscoveryPointProps {
   discovered: boolean;
 }
 
-export function DiscoveryPoint({ position, discovered }: DiscoveryPointProps) {
+export function DiscoveryPoint({
+  position,
+  discovered,
+}: DiscoveryPointProps) {
   const meshRef = useRef<Mesh>(null);
 
   useFrame((state) => {
     if (!meshRef.current || discovered) return;
-    // Pulse animation for undiscovered points
     const scale = 1 + Math.sin(state.clock.elapsedTime * 2) * 0.2;
     meshRef.current.scale.setScalar(scale);
-    meshRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime * 1.5) * 0.1;
+    meshRef.current.position.y =
+      position[1] + Math.sin(state.clock.elapsedTime * 1.5) * 0.1;
   });
 
   return (

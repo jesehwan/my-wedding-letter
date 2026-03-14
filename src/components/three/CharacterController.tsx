@@ -1,19 +1,48 @@
 "use client";
 
-import { useCharacterMovement } from "@/hooks/useCharacterMovement";
-import { Character } from "./Character";
-import { JoystickInput } from "@/types/discovery";
+import { useKeyboardMovement, JoystickInput } from "@/hooks/useKeyboardMovement";
+import { Character, AnimationState } from "./Character";
+import { useFrame } from "@react-three/fiber";
+import { MutableRefObject, useRef, useState, useEffect } from "react";
+import { AABB } from "@/lib/collision";
 
 interface CharacterControllerProps {
-  paused: boolean;
-  joystickInput: JoystickInput;
+  joystickRef?: MutableRefObject<JoystickInput>;
+  walls?: AABB[];
+  worldBounds?: AABB;
+  characterRadius?: number;
+  initialPosition?: [number, number, number];
 }
 
 export function CharacterController({
-  paused,
-  joystickInput,
+  joystickRef,
+  walls,
+  worldBounds,
+  characterRadius,
+  initialPosition,
 }: CharacterControllerProps) {
-  const groupRef = useCharacterMovement(paused, joystickInput);
+  const { groupRef, moveStateRef } = useKeyboardMovement({
+    joystickRef,
+    walls,
+    worldBounds,
+    characterRadius,
+  });
+  const [animationState, setAnimationState] = useState<AnimationState>("idle");
+  const prevAnimRef = useRef<AnimationState>("idle");
 
-  return <Character ref={groupRef} />;
+  useEffect(() => {
+    if (groupRef.current?.position && initialPosition) {
+      groupRef.current.position.set(...initialPosition);
+    }
+  }, []);
+
+  useFrame(() => {
+    const next: AnimationState = moveStateRef.current === "moving" ? "walk" : "idle";
+    if (prevAnimRef.current !== next) {
+      prevAnimRef.current = next;
+      setAnimationState(next);
+    }
+  });
+
+  return <Character ref={groupRef} animationState={animationState} />;
 }
