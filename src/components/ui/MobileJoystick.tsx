@@ -65,18 +65,23 @@ export function MobileJoystick({ joystickRef }: MobileJoystickProps) {
   if (!isTouchDevice) return null;
 
   return (
-    <div
-      ref={baseRef}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-      className="fixed bottom-8 left-8 z-40 flex h-28 w-28 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm"
-      style={{ touchAction: "none" }}
-    >
+    <div className="fixed bottom-8 left-8 z-40 flex flex-col items-center gap-1">
+      <span className="rounded-full bg-white/80 px-2 py-0.5 text-sm text-gray-600 backdrop-blur-sm">
+        이동
+      </span>
       <div
-        ref={knobRef}
-        className="h-12 w-12 rounded-full bg-white/60 shadow-lg"
-      />
+        ref={baseRef}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        className="flex h-28 w-28 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm"
+        style={{ touchAction: "none" }}
+      >
+        <div
+          ref={knobRef}
+          className="h-12 w-12 rounded-full bg-white/60 shadow-lg"
+        />
+      </div>
     </div>
   );
 }

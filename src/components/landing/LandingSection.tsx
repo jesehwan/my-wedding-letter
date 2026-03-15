@@ -1,7 +1,8 @@
 import { weddingData } from "@/data/weddingData";
 import { CoupleNames } from "./CoupleNames";
+import { PhotoSlider } from "./PhotoSlider";
 import { WeddingInfo } from "./WeddingInfo";
-import { ExploreButton } from "./ExploreButton";
+import { ExploreCard } from "./ExploreCard";
 
 interface LandingSectionProps {
   onExplore: () => void;
@@ -14,13 +15,14 @@ export function LandingSection({ onExplore }: LandingSectionProps) {
         우리 결혼합니다
       </h1>
       <CoupleNames couple={weddingData.couple} />
+      <PhotoSlider />
       <WeddingInfo
         date={weddingData.date}
         time={weddingData.time}
         venue={weddingData.venue}
         address={weddingData.address}
       />
-      <ExploreButton onClick={onExplore} />
+      <ExploreCard onClick={onExplore} />
     </section>
   );
 }

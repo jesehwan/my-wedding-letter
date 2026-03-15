@@ -14,6 +14,7 @@ interface CharacterControllerProps {
   initialPosition?: [number, number, number];
   cameraAngleRef?: MutableRefObject<number>;
   topDown?: boolean;
+  frozen?: boolean;
 }
 
 export function CharacterController({
@@ -24,6 +25,7 @@ export function CharacterController({
   initialPosition,
   cameraAngleRef,
   topDown,
+  frozen,
 }: CharacterControllerProps) {
   const { groupRef, moveStateRef } = useKeyboardMovement({
     joystickRef,
@@ -43,6 +45,13 @@ export function CharacterController({
   }, []);
 
   useFrame(() => {
+    if (frozen) {
+      if (prevAnimRef.current !== "idle") {
+        prevAnimRef.current = "idle";
+        setAnimationState("idle");
+      }
+      return;
+    }
     const next: AnimationState = moveStateRef.current === "moving" ? "walk" : "idle";
     if (prevAnimRef.current !== next) {
       prevAnimRef.current = next;

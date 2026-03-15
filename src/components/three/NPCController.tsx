@@ -16,6 +16,8 @@ const ROTATION_LERP = 0.15;
 const ARRIVAL_THRESHOLD = 0.3;
 const DANCE_DURATION_MIN = 3;
 const DANCE_DURATION_MAX = 5;
+const IDLE_DURATION_MIN = 2;
+const IDLE_DURATION_MAX = 4;
 
 const WAYPOINTS: [number, number][] = [
   [0, -5],
@@ -25,7 +27,7 @@ const WAYPOINTS: [number, number][] = [
   [-3, -3],
 ];
 
-type NPCState = "walking" | "dancing";
+type NPCState = "walking" | "dancing" | "idle";
 
 export function NPCController() {
   const groupRef = useRef<Group>(null);
@@ -50,15 +52,24 @@ export function NPCController() {
       const dist = Math.sqrt(dx * dx + dz * dz);
 
       if (dist < ARRIVAL_THRESHOLD) {
-        // Arrived — switch to dancing
-        stateRef.current = "dancing";
-        danceTimerRef.current = 0;
-        danceDurationRef.current =
-          DANCE_DURATION_MIN +
-          Math.random() * (DANCE_DURATION_MAX - DANCE_DURATION_MIN);
-        const danceAnim = danceToggleRef.current ? "dance2" : "dance1";
-        danceToggleRef.current = !danceToggleRef.current;
-        setAnimationState(danceAnim as FemaleAnimationState);
+        // Arrived — randomly choose idle or dance
+        if (Math.random() < 0.5) {
+          stateRef.current = "idle";
+          danceTimerRef.current = 0;
+          danceDurationRef.current =
+            IDLE_DURATION_MIN +
+            Math.random() * (IDLE_DURATION_MAX - IDLE_DURATION_MIN);
+          setAnimationState("idle");
+        } else {
+          stateRef.current = "dancing";
+          danceTimerRef.current = 0;
+          danceDurationRef.current =
+            DANCE_DURATION_MIN +
+            Math.random() * (DANCE_DURATION_MAX - DANCE_DURATION_MIN);
+          const danceAnim = danceToggleRef.current ? "dance2" : "dance1";
+          danceToggleRef.current = !danceToggleRef.current;
+          setAnimationState(danceAnim as FemaleAnimationState);
+        }
         return;
       }
 
@@ -88,10 +99,9 @@ export function NPCController() {
       while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
       group.rotation.y += angleDiff * ROTATION_LERP;
     } else {
-      // Dancing
+      // Dancing or idle — wait for timer then move to next waypoint
       danceTimerRef.current += clampedDelta;
       if (danceTimerRef.current >= danceDurationRef.current) {
-        // Done dancing — move to next waypoint
         stateRef.current = "walking";
         waypointIndexRef.current =
           (waypointIndexRef.current + 1) % WAYPOINTS.length;

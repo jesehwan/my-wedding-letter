@@ -9,6 +9,7 @@ import { Fireworks } from "./Fireworks";
 import { LoadingScreen } from "../ui/LoadingScreen";
 import { StoryPopup } from "../ui/StoryPopup";
 import { EndingScreen } from "../ui/EndingScreen";
+import { Tutorial } from "../ui/Tutorial";
 import { MobileJoystick } from "../ui/MobileJoystick";
 import { DiscoveryPointData } from "@/types/discovery";
 import { discoveryPoints } from "@/data/weddingData";
@@ -25,6 +26,7 @@ export default function Experience({ onBack }: ExperienceProps) {
   const [showEnding, setShowEnding] = useState(false);
   const [endingPhase, setEndingPhase] = useState<"fireworks" | "popup" | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(true);
   const [cameraFlipped, setCameraFlipped] = useState(false);
   const [topDown, setTopDown] = useState(false);
   const joystickRef = useRef<JoystickInput>({ x: 0, y: 0 });
@@ -79,6 +81,7 @@ export default function Experience({ onBack }: ExperienceProps) {
             cameraFlipped={cameraFlipped}
             topDown={topDown}
             lookUpMode={endingPhase === "fireworks"}
+            frozen={showTutorial || !!activeDiscovery}
           />
         </Suspense>
         {showEnding && <Fireworks />}
@@ -86,25 +89,40 @@ export default function Experience({ onBack }: ExperienceProps) {
 
       <MobileJoystick joystickRef={joystickRef} />
 
-      <button
-        onClick={() => setCameraFlipped((prev) => !prev)}
-        className="fixed bottom-6 right-6 z-40 rounded-full bg-white/80 p-3 text-xl shadow backdrop-blur transition-colors hover:bg-white"
-        aria-label={cameraFlipped ? "카메라 원래대로" : "카메라 반전"}
-      >
-        {cameraFlipped ? "🔄" : "🔃"}
-      </button>
-
-      <button
-        onClick={() => setTopDown((prev) => !prev)}
-        className="fixed bottom-6 right-20 z-40 rounded-full bg-white/80 p-3 text-xl shadow backdrop-blur transition-colors hover:bg-white"
-        aria-label={topDown ? "기본 시점" : "탑뷰"}
-      >
-        {topDown ? "👤" : "🔽"}
-      </button>
+      <div className="fixed bottom-6 right-6 z-40 flex items-end gap-[12px]">
+        {!topDown && (
+          <div className="flex flex-col items-center gap-1">
+            <span className="rounded-full bg-white/80 px-2 py-0.5 text-sm text-gray-600 text-center backdrop-blur-sm">시선 변경</span>
+            <button
+              onClick={() => setCameraFlipped((prev) => !prev)}
+              className="flex h-[60px] w-[60px] items-center justify-center rounded-full bg-white/80 shadow backdrop-blur transition-colors hover:bg-white"
+              aria-label={cameraFlipped ? "카메라 원래대로" : "카메라 반전"}
+            >
+              <img src="/image/refresh.svg" alt="시선 변경" className="h-7 w-7" />
+            </button>
+          </div>
+        )}
+        <div className="flex flex-col items-center gap-1">
+          <span className="rounded-full bg-white/80 px-2 py-0.5 text-sm text-gray-600 text-center backdrop-blur-sm">탑뷰</span>
+          <button
+            onClick={() => setTopDown((prev) => !prev)}
+            className={`flex h-[60px] w-[60px] items-center justify-center rounded-full shadow backdrop-blur transition-colors ${
+              topDown ? "bg-gray-700 hover:bg-gray-600" : "bg-white/80 hover:bg-white"
+            }`}
+            aria-label={topDown ? "기본 시점" : "탑뷰"}
+          >
+            <img src="/image/eye.svg" alt="탑뷰" className={`h-7 w-7 ${topDown ? "invert" : ""}`} />
+          </button>
+        </div>
+      </div>
 
       <div className="fixed right-4 top-4 z-40 rounded-full bg-white/80 px-4 py-2 text-sm text-gray-600 shadow backdrop-blur">
         {discoveredIds.size} / {discoveryPoints.length}
       </div>
+
+      {isLoaded && showTutorial && (
+        <Tutorial onClose={() => setShowTutorial(false)} />
+      )}
 
       {activeDiscovery && (
         <StoryPopup point={activeDiscovery} onClose={handleClosePopup} />

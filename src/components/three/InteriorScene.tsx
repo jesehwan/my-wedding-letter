@@ -19,6 +19,7 @@ interface InteriorSceneProps {
   cameraFlipped?: boolean;
   topDown?: boolean;
   lookUpMode?: boolean;
+  frozen?: boolean;
 }
 
 export function InteriorScene({
@@ -29,6 +30,7 @@ export function InteriorScene({
   cameraFlipped,
   topDown,
   lookUpMode,
+  frozen,
 }: InteriorSceneProps) {
   const cameraAngleRef = useRef(0);
 
@@ -38,9 +40,10 @@ export function InteriorScene({
       <RoomSpotlights />
       <CharacterController
         joystickRef={joystickRef}
-        initialPosition={[0, 0, -2.5]}
+        initialPosition={[0, 0, 3]}
         cameraAngleRef={cameraAngleRef}
         topDown={topDown}
+        frozen={frozen}
       />
       <CameraRig flipped={cameraFlipped} topDown={topDown} lookUpMode={lookUpMode} cameraAngleRef={cameraAngleRef} />
       <NPCController />

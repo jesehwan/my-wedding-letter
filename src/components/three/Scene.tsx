@@ -13,8 +13,8 @@ interface SceneProps {
 
 export function Scene({
   children,
-  ambientIntensity = 3,
-  directionalIntensity = 0.6,
+  ambientIntensity = 1,
+  directionalIntensity = 1.2,
   directionalColor = "#f4eee4",
   showGroundPlane = true,
 }: SceneProps) {
@@ -40,7 +40,7 @@ export function Scene({
       {showGroundPlane && (
         <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
           <planeGeometry args={[200, 200]} />
-          <meshStandardMaterial color="#828588" />
+          <meshStandardMaterial color="#c8e6a0" />
         </mesh>
       )}
 

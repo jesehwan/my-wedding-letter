@@ -37,8 +37,8 @@ function RoomSpot({ position, target, castShadow }: RoomSpotlight) {
       <spotLight
         ref={lightRef}
         position={position}
-        intensity={40}
-        angle={Math.PI / 8}
+        intensity={35}
+        angle={Math.PI / 9}
         penumbra={1}
         decay={1.1}
         castShadow={castShadow}
