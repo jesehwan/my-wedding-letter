@@ -21,6 +21,8 @@ const DOUBLED_PHOTOS = [...PHOTOS, ...PHOTOS];
 
 const AUTO_SPEED = 1; // px per frame
 const RESUME_DELAY = 3000; // ms after interaction before auto-scroll resumes
+const FRAME_HEIGHT = 320; // base frame height
+const SM_FRAME_HEIGHT = 400; // sm frame height
 
 export function PhotoSlider() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -152,11 +154,11 @@ export function PhotoSlider() {
               className="flex-shrink-0"
               style={{ transform: `rotate(${rotation}deg)` }}
             >
-              <div className="h-[320px] w-[260px] rounded-sm bg-white p-4 shadow-md sm:h-[400px] sm:w-[320px] sm:p-5">
+              <div className="slider-frame rounded-sm bg-white p-4 shadow-md sm:p-5">
                 <img
                   src={src}
                   alt={`웨딩 사진 ${(i % PHOTOS.length) + 1}`}
-                  className="pointer-events-none h-full w-full object-cover"
+                  className="pointer-events-none h-full w-auto object-contain"
                   draggable={false}
                 />
               </div>
@@ -164,6 +166,16 @@ export function PhotoSlider() {
           );
         })}
       </div>
+      <style>{`
+        .slider-frame {
+          height: ${FRAME_HEIGHT}px;
+        }
+        @media (min-width: 640px) {
+          .slider-frame {
+            height: ${SM_FRAME_HEIGHT}px;
+          }
+        }
+      `}</style>
     </div>
   );
 }
