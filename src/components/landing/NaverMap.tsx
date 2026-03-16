@@ -42,7 +42,7 @@ export function NaverMap() {
   }, []);
 
   return (
-    <div className="w-full max-w-md px-2">
+    <div className="mt-8 w-full max-w-md px-2">
       <div
         ref={mapRef}
         className="h-[250px] w-full overflow-hidden rounded-xl shadow-md"

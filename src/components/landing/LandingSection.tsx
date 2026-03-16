@@ -3,6 +3,8 @@ import { CoupleNames } from "./CoupleNames";
 import { PhotoSlider } from "./PhotoSlider";
 import { WeddingInfo } from "./WeddingInfo";
 import { ExploreCard } from "./ExploreCard";
+import { FamilyInfo } from "./FamilyInfo";
+import { DirectionsInfo } from "./DirectionsInfo";
 import { NaverMap } from "./NaverMap";
 
 interface LandingSectionProps {
@@ -17,6 +19,38 @@ export function LandingSection({ onExplore }: LandingSectionProps) {
       </h1>
       <CoupleNames couple={weddingData.couple} />
       <PhotoSlider />
+      <div className="flex items-center gap-3 text-gray-300">
+        <span className="h-px w-12 bg-gray-300" />
+        <span className="text-xs tracking-widest">&#10045;</span>
+        <span className="h-px w-12 bg-gray-300" />
+      </div>
+      <p className="max-w-xs text-center text-sm leading-relaxed text-gray-500">
+        같은 곳을 바라보다 눈이 마주친 두 사람,
+        <br />
+        웃음이 끊이지 않는 한 팀이 되었습니다.
+        <br />
+        <br />
+        이 기쁜 소식을 함께 나누고 싶어
+        <br />
+        소중한 분들을 초대합니다.
+      </p>
+      <div className="mt-4 flex w-full flex-col items-center gap-2">
+        <p className="text-xs text-gray-400">
+          저희의 이야기를 소소하게 담아보았어요
+        </p>
+        <ExploreCard onClick={onExplore} />
+      </div>
+      <div className="flex items-center gap-3 text-gray-300">
+        <span className="h-px w-12 bg-gray-300" />
+        <span className="text-xs tracking-widest">&#10045;</span>
+        <span className="h-px w-12 bg-gray-300" />
+      </div>
+      <FamilyInfo couple={weddingData.couple} />
+      <div className="flex items-center gap-3 text-gray-300">
+        <span className="h-px w-12 bg-gray-300" />
+        <span className="text-xs tracking-widest">&#10045;</span>
+        <span className="h-px w-12 bg-gray-300" />
+      </div>
       <WeddingInfo
         date={weddingData.date}
         time={weddingData.time}
@@ -24,7 +58,7 @@ export function LandingSection({ onExplore }: LandingSectionProps) {
         address={weddingData.address}
       />
       <NaverMap />
-      <ExploreCard onClick={onExplore} />
+      <DirectionsInfo />
     </section>
   );
 }

@@ -11,6 +11,14 @@ export const weddingData: WeddingInfoData = {
     brideName: "신지은",
     groomFamilyName: "제",
     brideFamilyName: "신",
+    groomParents: [
+      { role: "아버지", name: "제병덕", phone: "010-2245-5880" },
+      { role: "어머니", name: "최기원", phone: "010-3041-5880" },
+    ],
+    brideParents: [
+      { role: "아버지", name: "신완철", phone: "010-9797-2637" },
+      { role: "어머니", name: "이미재", phone: "010-3775-2637" },
+    ],
   },
 };
 
