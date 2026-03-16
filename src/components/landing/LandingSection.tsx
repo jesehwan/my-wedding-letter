@@ -3,6 +3,7 @@ import { CoupleNames } from "./CoupleNames";
 import { PhotoSlider } from "./PhotoSlider";
 import { WeddingInfo } from "./WeddingInfo";
 import { ExploreCard } from "./ExploreCard";
+import { NaverMap } from "./NaverMap";
 
 interface LandingSectionProps {
   onExplore: () => void;
@@ -22,6 +23,7 @@ export function LandingSection({ onExplore }: LandingSectionProps) {
         venue={weddingData.venue}
         address={weddingData.address}
       />
+      <NaverMap />
       <ExploreCard onClick={onExplore} />
     </section>
   );
