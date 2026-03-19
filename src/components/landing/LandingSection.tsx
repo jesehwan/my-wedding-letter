@@ -5,6 +5,7 @@ import { WeddingInfo } from "./WeddingInfo";
 import { ExploreCard } from "./ExploreCard";
 import { FamilyInfo } from "./FamilyInfo";
 import { DirectionsInfo } from "./DirectionsInfo";
+import { AccountInfo } from "./AccountInfo";
 import { NaverMap } from "./NaverMap";
 
 interface LandingSectionProps {
@@ -59,6 +60,12 @@ export function LandingSection({ onExplore }: LandingSectionProps) {
       />
       <NaverMap />
       <DirectionsInfo />
+      <div className="flex items-center gap-3 text-gray-300">
+        <span className="h-px w-12 bg-gray-300" />
+        <span className="text-xs tracking-widest">&#10045;</span>
+        <span className="h-px w-12 bg-gray-300" />
+      </div>
+      <AccountInfo />
     </section>
   );
 }
