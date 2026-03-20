@@ -7,7 +7,7 @@ import { LoadingScreen } from "@/components/ui/LoadingScreen";
 
 const Experience = lazy(() => import("@/components/three/Experience"));
 
-export default function Home() {
+function HomeContent() {
   const searchParams = useSearchParams();
   const side = searchParams.get("side");
   const [showExperience, setShowExperience] = useState(false);
@@ -48,5 +48,13 @@ export default function Home() {
         </div>
       )}
     </>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense>
+      <HomeContent />
+    </Suspense>
   );
 }
