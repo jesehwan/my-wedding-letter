@@ -9,8 +9,20 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://my-wedding-letter.vercel.app"),
   title: "우리 결혼합니다",
   description: "결혼식 안내 및 신혼집 3D 체험",
+  openGraph: {
+    title: "우리 결혼합니다",
+    description: "결혼식 안내 및 신혼집 3D 체험",
+    images: [
+      {
+        url: "/image/photomatic133040.jpg",
+        width: 720,
+        height: 1080,
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
