@@ -1,16 +1,16 @@
 import { useRef, useEffect, useCallback, useState } from "react";
 
 const PHOTOS = [
-  "/image/photomatic133107_resize.jpg",
   "/image/photomatic133040.jpg",
-  "/image/photomatic133194_resize.jpg",
-  "/image/photomatic132986.jpg",
-  "/image/photomatic133180_resize.jpg",
-  "/image/photomatic133122.jpg",
-  "/image/photomatic133028.jpg",
   "/image/photomatic133081_resize.jpg",
+  "/image/photomatic133122.jpg",
+  "/image/photomatic132986.jpg",
   "/image/photomatic133131.jpg",
+  "/image/photomatic133180_resize.jpg",
   "/image/photomatic133075_resize.jpg",
+  "/image/photomatic133194_resize.jpg",
+  "/image/photomatic133107_resize.jpg",
+  "/image/photomatic133028.jpg",
 ];
 
 // Fixed rotation offsets per photo (polaroid feel)

@@ -7,9 +7,9 @@ interface Account {
 }
 
 const groomAccounts: Account[] = [
-  { name: "제세환", bank: "토스은행", number: "1000-2897-7636" },
-  { name: "제병덕", bank: "광주은행", number: "420-121-040095" },
-  { name: "최기원", bank: "농협은행", number: "302-1894-2043-21" },
+  { name: "제세환", bank: "토스뱅크", number: "1000-2897-7636" },
+  { name: "제병덕", bank: "광주", number: "420-121-040095" },
+  { name: "최기원", bank: "농협", number: "302-1894-2043-21" },
 ];
 
 const brideAccounts: Account[] = [
