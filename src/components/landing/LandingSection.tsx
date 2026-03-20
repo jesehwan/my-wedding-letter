@@ -6,13 +6,15 @@ import { ExploreCard } from "./ExploreCard";
 import { FamilyInfo } from "./FamilyInfo";
 import { DirectionsInfo } from "./DirectionsInfo";
 import { AccountInfo } from "./AccountInfo";
+import { BusInfo } from "./BusInfo";
 import { NaverMap } from "./NaverMap";
 
 interface LandingSectionProps {
   onExplore: () => void;
+  side?: string | null;
 }
 
-export function LandingSection({ onExplore }: LandingSectionProps) {
+export function LandingSection({ onExplore, side }: LandingSectionProps) {
   return (
     <section className="flex min-h-dvh flex-col items-center justify-center gap-6 bg-white px-4 py-12 sm:gap-8">
       <h1 className="text-sm uppercase tracking-widest text-gray-400">
@@ -58,6 +60,7 @@ export function LandingSection({ onExplore }: LandingSectionProps) {
         venue={weddingData.venue}
         address={weddingData.address}
       />
+      {side === "groom" && <BusInfo />}
       <NaverMap />
       <DirectionsInfo />
       <div className="flex items-center gap-3 text-gray-300">

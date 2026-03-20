@@ -1,12 +1,15 @@
 "use client";
 
 import { useState, useCallback, lazy, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { LandingSection } from "@/components/landing/LandingSection";
 import { LoadingScreen } from "@/components/ui/LoadingScreen";
 
 const Experience = lazy(() => import("@/components/three/Experience"));
 
 export default function Home() {
+  const searchParams = useSearchParams();
+  const side = searchParams.get("side");
   const [showExperience, setShowExperience] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
@@ -41,7 +44,7 @@ export default function Home() {
         </div>
       ) : (
         <div className={isTransitioning ? "animate-fade-out" : "animate-fade-in"}>
-          <LandingSection onExplore={handleExplore} />
+          <LandingSection onExplore={handleExplore} side={side} />
         </div>
       )}
     </>
