@@ -8,6 +8,7 @@ import { DirectionsInfo } from "./DirectionsInfo";
 import { AccountInfo } from "./AccountInfo";
 import { BusInfo } from "./BusInfo";
 import { NaverMap } from "./NaverMap";
+import { ParkingInfo } from "./ParkingInfo";
 
 interface LandingSectionProps {
   onExplore: () => void;
@@ -62,6 +63,7 @@ export function LandingSection({ onExplore, side }: LandingSectionProps) {
       />
       {side === "groom" && <BusInfo />}
       <NaverMap />
+      <ParkingInfo />
       <DirectionsInfo />
       <div className="flex items-center gap-3 text-gray-300">
         <span className="h-px w-12 bg-gray-300" />

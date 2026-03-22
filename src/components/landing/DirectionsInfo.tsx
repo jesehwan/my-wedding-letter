@@ -25,12 +25,6 @@ export function DirectionsInfo() {
           </div>
         </div>
       </div>
-      <div className="rounded-xl bg-gray-50 p-5">
-        <h3 className="mb-3 text-base font-semibold text-gray-700">주차</h3>
-        <p className="text-sm leading-relaxed text-gray-600">
-          교회정문을 지나 우측으로 돌아서 뒷편으로 오십시오
-        </p>
-      </div>
     </div>
   );
 }
